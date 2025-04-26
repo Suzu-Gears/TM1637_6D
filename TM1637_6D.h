@@ -62,6 +62,7 @@ class TM1637_6D {
   void   display(int8_t DispData[], int8_t DispPointData[]);
   void   display(uint8_t BitAddr, int8_t DispData, int8_t DispPointData);
   void   displayError();
+  void   displayAlert();
   void   displayInteger(int32_t intdisplay, bool leading_zeros);
   void   displayFloat(float floatdisplay);
   void   clearDisplay(void);

@@ -36,7 +36,9 @@
 #include <Arduino.h>
 static int8_t TubeTab[] = {0x3f, 0x06, 0x5b, 0x4f,
                            0x66, 0x6d, 0x7d, 0x07,
-                           0x7f, 0x6f, 0x00, 0x40};  // 0~9, 10=blank digit, 11=dash/minus character
+                           0x7f, 0x6f, 0x00, 0x40,  // 0~9, 10=blank digit, 11=dash/minus character
+                           0x79, 0x50, 0x5c};       // 12="E", 13="r", 14="o"
+
 TM1637_6D::TM1637_6D(uint8_t Clk, uint8_t Data) {
   Clkpin  = Clk;
   Datapin = Data;
@@ -98,7 +100,7 @@ void TM1637_6D::display(int8_t DispData[], int8_t DispPointData[]) {
   int8_t i;
 
   for (i = 0; i < 6; i++) {
-    if (DispData[i] > 11 || DispData[i] < 0) DispData[i] = 11;
+    if (DispData[i] > 14 || DispData[i] < 0) DispData[i] = 11;
   }
 
   SegData[0] = DispData[3];
@@ -148,6 +150,12 @@ void TM1637_6D::display(uint8_t BitAddr, int8_t DispData, int8_t DispPointData) 
 // Displays 6 dashes are error marker
 void TM1637_6D::displayError() {
   int8_t tempListDisp[6]      = {11, 11, 11, 11, 11, 11};              // fill array with dashes character(11th)
+  int8_t tempListDispPoint[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};  // don't show any points
+  display(tempListDisp, tempListDispPoint);
+}
+
+void TM1637_6D::displayAlert() {
+  int8_t tempListDisp[6]      = {10, 13, 14, 13, 13, 12};              //  blank, "r", "o", "r", "r", "E"
   int8_t tempListDispPoint[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};  // don't show any points
   display(tempListDisp, tempListDispPoint);
 }
